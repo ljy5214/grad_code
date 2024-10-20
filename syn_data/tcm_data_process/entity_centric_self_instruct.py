@@ -2,8 +2,9 @@ import openai
 import json
 import sys
 import random
-
-openai.api_key = "sk-xxx"  # you must provide your OpenAI API key before crawling
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
+# openai.api_key = "sk-xxx"  # you must provide your OpenAI API key before crawling
 
 if not openai.api_key:
     raise ValueError("OpenAI API key not provided. Please set the 'openai.api_key' variable.")
@@ -54,6 +55,39 @@ def return_random_prompt(kg_file=None):
     print(system_prompt)
     return system_prompt
 
+def get_response(model,prompt,tokenizer):
+    # model_name = '../model/qwen/Qwen2.5-7B-Instruct'
+
+    # model = AutoModelForCausalLM.from_pretrained(
+    #     model_name,
+    #     torch_dtype="auto",
+    #     device_map="auto"
+    # )
+    # tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+    # prompt = "给我讲一个笑话"
+    messages = [
+        {"role": "system", "content": "You are Qwen, created by Alibaba Cloud. You are a helpful assistant."},
+        {"role": "user", "content": prompt},
+    ]
+    text = tokenizer.apply_chat_template(
+        messages,
+        tokenize=False,
+        add_generation_prompt=True,
+    )
+    model_inputs = tokenizer([text], return_tensors="pt").to(model.device)
+    torch.backends.cuda.enable_mem_efficient_sdp(False)
+    torch.backends.cuda.enable_flash_sdp(False)
+    generated_ids = model.generate(
+        **model_inputs,
+        max_new_tokens=512,
+    )
+    generated_ids = [
+        output_ids[len(input_ids):] for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
+    ]
+
+    response = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
+    return response
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
@@ -62,17 +96,25 @@ if __name__ == "__main__":
 
     kg_file = sys.argv[1]
     output_file = open(sys.argv[2], 'w', encoding="utf-8")
-
-    MAX_EPOCHS = 10000  # number of data to generate (each prompt contains 20 JSON-formatted data)
+    model_name = '../model/qwen/Qwen2.5-7B-Instruct'
+    model = AutoModelForCausalLM.from_pretrained(
+        model_name,
+        torch_dtype="auto",
+        device_map="auto"
+    )
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    MAX_EPOCHS = 10  # number of data to generate (each prompt contains 20 JSON-formatted data)
     for k in range(MAX_EPOCHS):
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",  # here we use `gpt-3.5-turbo` model, while Stanford-Alpaca uses `text-davinci-003`
-            messages=[
-                {"role": "user", "content": return_random_prompt(kg_file=kg_file)},
-            ]
-        )
-        print(response["choices"])
-        output_file.write(response["choices"][0]["message"]["content"] + '\n')
+        # response = openai.ChatCompletion.create(
+        #     model="gpt-3.5-turbo",  # here we use `gpt-3.5-turbo` model, while Stanford-Alpaca uses `text-davinci-003`
+        #     messages=[
+        #         {"role": "user", "content": return_random_prompt(kg_file=kg_file)},
+        #     ]
+        # )
+        # print(response["choices"])
+        # output_file.write(response["choices"][0]["message"]["content"] + '\n')
+        response = get_response(model, return_random_prompt(kg_file=kg_file),tokenizer)
+        output_file.write(response + '\n')
 
     output_file.close()
 
