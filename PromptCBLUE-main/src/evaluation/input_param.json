@@ -1,0 +1,12 @@
+{
+  "fileData":{
+    "evaluatorDir":"",
+    "evaluatorPath":"",
+    "standardFileDir":"",
+    "standardFilePath":"../../datasets/exp/dev_correct_ans.json",
+    "userFileDir":"",
+    "userFilePath":"../../datasets/exp/qwen7bi_1020/results_dev_qwen7bi_pro_ans_10201650.json",
+    "outputDir":"",
+    "outputPath":"../../datasets/exp/qwen7bi_1020/score_dev_qwen7bi_pro_ans_10201650.json"
+  }
+}
