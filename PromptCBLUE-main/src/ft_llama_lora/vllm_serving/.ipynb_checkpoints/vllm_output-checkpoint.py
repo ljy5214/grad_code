@@ -13,7 +13,7 @@ def get_completion(prompts, model, tokenizer=None, max_tokens=512, temperature=0
     # 创建采样参数。temperature 控制生成文本的多样性，top_p 控制核心采样的概率
     sampling_params = SamplingParams(temperature=temperature, top_p=top_p, max_tokens=max_tokens)
     # 初始化 vLLM 推理引擎
-    llm = LLM(model=model,max_model_len=max_model_len,trust_remote_code=True)
+    llm = LLM(model=model, tokenizer=tokenizer,max_model_len=max_model_len,trust_remote_code=True)
     outputs = llm.generate(prompts, sampling_params)
     return outputs
 
@@ -23,7 +23,7 @@ def get_completion(prompts, model, tokenizer=None, max_tokens=512, temperature=0
 
 if __name__ == "__main__":    
     # 初始化 vLLM 推理引擎
-    model='/root/autodl-tmp/Qwen/Qwen2.5-7B' # 指定模型路径
+    model='/root/autodl-tmp/Qwen2.5-7B-Instruct' # 指定模型路径
     # model="qwen/Qwen2-7B-Instruct" # 指定模型名称，自动下载模型
     # tokenizer = None
     # 加载分词器后传入vLLM 模型，但不是必要的。
@@ -35,8 +35,8 @@ if __name__ == "__main__":
     我的问题是:{user_query}
     你的答案:
     """
-    f_out = open("../../../datasets/exp/qwen7b_1021/dev_qwen7b_pro_ans_te.json", "a", encoding="utf-8", buffering=1)
-    with open("../../../datasets/exp/dev.json", "r", encoding="utf-8") as f:
+    f_out = open("dev_qwen7bi_pro_ans_te.json", "a", encoding="utf-8", buffering=1)
+    with open("./dev.json", "r", encoding="utf-8") as f:
 
         for line in f:
             line = line.strip()
@@ -45,15 +45,15 @@ if __name__ == "__main__":
 
             line = json.loads(line)
             question_item = instruction.format(user_query=str(line['input']))
-            messages = [
-            {"role": "system", "content": "You are Qwen, created by Alibaba Cloud. You are a helpful assistant."},
-            {"role": "user", "content": question_item}
-            ]
-            text = tokenizer.apply_chat_template(
-                messages,
-                tokenize=False,
-                add_generation_prompt=True
-            )
+            # messages = [
+            # {"role": "system", "content": "You are Qwen, created by Alibaba Cloud. You are a helpful assistant."},
+            # {"role": "user", "content": question_item}
+            # ]
+            # text = tokenizer.apply_chat_template(
+            #     messages,
+            #     tokenize=False,
+            #     add_generation_prompt=True
+            # )
             ques.append(question_item)
             # ques.append(instruction+str(line['input']))
             all_.append(line)
@@ -79,7 +79,7 @@ if __name__ == "__main__":
     #     add_generation_prompt=True
     # )
 
-    outputs = get_completion(ques, model, tokenizer=tokenizer, max_tokens=512, temperature=1, top_p=1, max_model_len=2048)
+    outputs = get_completion(ques[:200], model, tokenizer=tokenizer, max_tokens=512, temperature=1, top_p=1, max_model_len=2048)
 
     # 输出是一个包含 prompt、生成文本和其他信息的 RequestOutput 对象列表。
     # 打印输出。

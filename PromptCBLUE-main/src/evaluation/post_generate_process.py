@@ -38,9 +38,9 @@ def process_generated_results(pred_file):
 
             sample_id_ = line.get("sample_id", "xxxx")
             input = line["input"]
-            gen_output = line["target"]
+            # gen_output = line["target"]
             # gen_output = gen_output.replace(":", "：", 100).replace(",", "，", 100).replace(";", "；", 100)
-            # gen_output = line["generated_output"]
+            gen_output = line["generated_output"]
             task_dataset = line["task_dataset"]
             task_type = line["task_type"]
 
@@ -587,8 +587,8 @@ def process_generated_results(pred_file):
 if __name__ == "__main__":
     # from_dir = sys.argv[1]
     # to_dir = sys.argv[2]
-    from_dir = '../../datasets/exp/dev.json'
-    to_dir = '../../datasets/exp/dev_correct_ans.json'
+    from_dir = '../../datasets/exp/qwen7b_1021/dev_qwen7b_pro_ans_te.json'
+    to_dir = '../../datasets/exp/qwen7b_1021/results_dev_qwen7b_pro_ans_1021.json'
     structured_outputs = process_generated_results(
         from_dir
     )
