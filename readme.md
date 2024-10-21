@@ -1,7 +1,7 @@
 目前进度：
 
-- [ ] 跑完7B和7B-Instruct的评测分
-- [ ] 核对wizard-lm的envole-instruct过程
+- [x] 跑完7B和7B-Instruct的评测分
+- [x] 核对wizard-lm的envole-instruct过程
 - [ ] 使用tcm生成数据（已经尝试完了，但效果不佳之后再试试）
 
 
