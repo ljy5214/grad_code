@@ -10,7 +10,7 @@
 
 路径（grad_code\PromptCBLUE-main\dataset\exp）
 
-
+结果有点问题，需要模型在自己的训练集上训练完之后，再在评测集所提供的训练集上进行微调，再进行评测
 
 | task         | metric         | qwen2.5-7B | qwen2.5-7B-Instruct |      |      |
 | ------------ | -------------- | ---------- | ------------------- | ---- | ---- |
@@ -30,4 +30,12 @@
 | IMCS-V2-SR   | micro-F1       | 0          | 0                   |      |      |
 | IMCS-V2-MRG  | Rouge-L        | 24.986     | 24.023              |      |      |
 | MedDG        | Rouge-L        | 5.906      | 11.255              |      |      |
-| Overall      | avg score7.532 | 7.532      | 23.114              |      |      |
+| Overall      | avg score      | 7.532      | 23.114              |      |      |
+
+### 10.27
+
+
+* 1.in-context learning
+* 2.更高质量的训练数据集（通用一点的医学）
+* 3.promptblue中一个任务的训练数据集（单个任务数据集or全部数据集）paper
+* 4.开题报告

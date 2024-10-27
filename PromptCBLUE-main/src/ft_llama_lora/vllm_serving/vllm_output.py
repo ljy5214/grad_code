@@ -9,7 +9,7 @@ import time
 # os.environ['VLLM_USE_MODELSCOPE']='True'
 
 def get_completion(prompts, model, tokenizer=None, max_tokens=512, temperature=0.8, top_p=0.95, max_model_len=2048):
-    stop_token_ids = [151329, 151336, 151338]
+    # stop_token_ids = [151329, 151336, 151338]
     # 创建采样参数。temperature 控制生成文本的多样性，top_p 控制核心采样的概率
     sampling_params = SamplingParams(temperature=temperature, top_p=top_p, max_tokens=max_tokens)
     # 初始化 vLLM 推理引擎
