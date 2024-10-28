@@ -1,4 +1,4 @@
-目前进度：
+* 目前进度：
 
 - [x] 跑完7B和7B-Instruct的评测分
 - [x] 核对wizard-lm的envole-instruct过程
@@ -34,8 +34,16 @@
 
 ### 10.27
 
+- [ ] 1.in-context learning
 
-* 1.in-context learning
-* 2.更高质量的训练数据集（通用一点的医学）
-* 3.promptblue中一个任务的训练数据集（单个任务数据集or全部数据集）paper
-* 4.开题报告
+- [x] 2.更高质量的训练数据集（通用一点的医学）
+  * [FreedomIntelligence/Huatuo-26M.](https://github.com/FreedomIntelligence/Huatuo-26M?tab=readme-ov-file)其中Huatuo-lite大小为180k
+  * [Toyhom/Chinese-medical-dialogue-data: Chinese medical dialogue data 中文医疗对话数据集](https://github.com/Toyhom/Chinese-medical-dialogue-data) 792k
+  * https://github.com/zhangsheng93/cMedQA2 188k
+  * [Chinese MedDialog Dataset / 中文医疗对话数据集_数据集-阿里云天池](https://tianchi.aliyun.com/dataset/92110) 1100k
+
+- [x] 3.promptblue中一个任务的训练数据集（单个任务数据集or全部数据集）paper
+
+  看代码，发现是用全部数据集训练的
+
+- [ ] 4.开题报告
