@@ -540,3 +540,23 @@ instruction = """
 ```
 
 ![proform_v04](./img/proform_v04.png)
+
+
+
+### 12.13
+
+*  研究\* 的影响，人眼发现影响较少，故不考虑删除
+* sft
+  * 在dev 40w数据中，通过先前的规则筛选得到13w，最终选取了2.8w（正负样本均衡）的数据作为训练数据集
+  * 两种训练方式：只有label；label+reason 
+  * 利用llamafactory进行lora微调
+
+![preform_v04_sft2](./img/preform_v04_sft2.png)
+
+* ppl计算
+
+  计算的reason生成,prompt和之前测试bleu和rouge的一致
+
+  可能是qwen的生成能力都很强
+
+  ![ppl_v04](./img/ppl_v04.png)
