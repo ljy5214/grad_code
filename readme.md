@@ -560,3 +560,68 @@ instruction = """
   可能是qwen的生成能力都很强
 
   ![ppl_v04](./img/ppl_v04.png)
+
+
+
+### 1.4
+
+LLM as judge
+
+主要将所有文本划分为了五个维度
+
+```python
+prompt = """ 背景假如:你是一位法院的法官,你有充足的法律相关知识
+你将评估一段由模型生成的法庭推理理由，并对其与正确推理理由之间的差距进行评分。评分基于以下五个维度，请仔细阅读每个维度的定义并按照要求进行打分。
+评分维度及含义：  
+1. ConsistencyWithLegalProvisions 依据法条是否一致（0-10分）：评估生成的推理是否正确引用了相关法律条文，且引用的法条是否与案件情境匹配。
+2. ComplianceWithWritingStyle 行文风格是否规范（0-10分）：评估推理的语言表达是否符合正式法律文书的书写规范，包括用词准确性、语法、逻辑结构等。    
+3. SufficiencyOfReasoning 理由是否充分（0-10分）：评估推理中是否提供了充分的论据来支持结论，是否覆盖了案件中主要的事实与争议点。    
+4. CorrectnessOfReasoning 理由是否都是正确的（0-10分）：评估推理是否完全正确，是否存在逻辑错误或与事实不符的内容。   
+5. SupportForPlaintiffClaims 法院对原告诉求的支持力度（0-10分）：评估生成推理对原告诉求支持力度的合理性，是否能够准确反映原告提出的诉求及法院的态度。   
+
+返回格式要求：  
+**请将评分结果以 JSON 格式返回，具体格式如下： ** 
+{{
+  "ConsistencyWithLegalProvisions": 0-10,
+  "ComplianceWithWritingStyle": 0-10,
+  "SufficiencyOfReasoning": 0-10,
+  "CorrectnessOfReasoning": 0-10,
+  "SupportForPlaintiffClaims": 0-10,
+  "OverallComments": "对该生成推理的整体评价，可简要说明优缺点。"
+}}
+
+评分示例：  
+以下为一个示例评估结果：  
+{{
+  "ConsistencyWithLegalProvisions": 8,
+  "ComplianceWithWritingStyle": 9,
+  "SufficiencyOfReasoning": 7,
+  "CorrectnessOfReasoning": 6,
+  "SupportForPlaintiffClaims": 8,
+  "OverallComments": "生成推理引用的法律条文基本正确，但对某些法条的适用解释不够全面。行文规范性较好，但理由部分略显不足，未完全覆盖案件的主要争议点，且存在部分逻辑错误。总体支持了原告的诉求，但力度略显不足。"
+}}
+
+任务目标：  
+你将根据上述评分维度、格式以及示例，参考案件声明和正确推理理由，仔细阅读待评价推理理由，并给出公平、客观的评分和整体评价。
+
+案件声明：
+{JudgeAccusation}
+
+正确推理理由：
+{JudgeReason}
+
+待评价推理理由：
+{model_result}
+
+评分结果："""
+```
+
+
+
+![llmasjudge_v01](./img/llmasjudge_v01.png)
+
+情况：
+
+* 分类任务效果都具有提升
+* 生成效果并不理想（有点训坏了）
+
