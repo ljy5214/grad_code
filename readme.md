@@ -632,3 +632,15 @@ prompt = """ 背景假如:你是一位法院的法官,你有充足的法律相�
 调整学习率
 
 ![llmasjudge_v02](./img/llmasjudge_v02.png)
+
+目前最终方案采用 **全量微调，learningrate=1.5e-5,  epoch=4**
+
+llmasjudge分数提升4个点，分类任务性能提升近20个点
+
+下一步目标：
+
+- 看看相关paper，在已有数据的情况下来进一步扩充数据集
+
+​     陈老师发给我的论文https://arxiv.org/pdf/2312.15685
+
+​     wizard 
